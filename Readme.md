@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Сергей Иншаков](https://up.htmlacademy.ru/javascript/4/user/59949).
-* Наставник: `Неизвестно`.
+* Наставник: [Игорь Шевченко](https://up.htmlacademy.ru/javascript/4/user/149304).
 
 ---
 
