@@ -133,7 +133,7 @@
       var startY = ((this._container.height - this._resizeConstraint.side) / 2) - 6;
       var middleX = (startX + this._resizeConstraint.side) + 4;
       var middleY = (startY + this._resizeConstraint.side) + 4;
-      
+
       this._ctx.setLineDash([0, 1]);
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
       this._ctx.beginPath();
