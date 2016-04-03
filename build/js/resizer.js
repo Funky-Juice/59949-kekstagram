@@ -133,8 +133,8 @@
 
       for (var i = 0; i < imgWidth; i += 30) {
         drawLineX(this._ctx, stepSize, someX + i, someY);
-        
-      };
+
+      }
 
       var drawLineY = function(ctx, size, x, y) {
         ctx.beginPath();
@@ -144,9 +144,9 @@
         ctx.stroke();
       };
 
-      for (var i = 0; i < imgHeight; i += 30) {
+      for (i = 0; i < imgHeight; i += 30) {
         drawLineY(this._ctx, stepSize, someX + imgWidth, someY + i);
-      };
+      }
 
       var drawLineInvX = function(ctx, size, x, y) {
         ctx.beginPath();
@@ -156,9 +156,9 @@
         ctx.stroke();
       };
 
-      for (var i = 0; i < imgWidth; i += 30) {
+      for (i = 0; i < imgWidth; i += 30) {
         drawLineInvX(this._ctx, stepSize, (someX + imgWidth) - i, someY + imgHeight);
-      };
+      }
 
       var drawLineInvY = function(ctx, size, x, y) {
         ctx.beginPath();
@@ -168,11 +168,11 @@
         ctx.stroke();
       };
 
-      for (var i = 0; i < imgHeight; i += 30) {
+      for (i = 0; i < imgHeight; i += 30) {
         drawLineInvY(this._ctx, stepSize, someX, (someY + imgHeight) - i);
       }
 
-      // Отрисовка прямоугольника зоны кадрирования точками.      
+      // Отрисовка прямоугольника зоны кадрирования точками.
 
       // this._ctx.beginPath();
 
