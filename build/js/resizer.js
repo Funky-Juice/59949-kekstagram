@@ -158,22 +158,12 @@
       var middleX = (startX + this._resizeConstraint.side) + 4;
       var middleY = (startY + this._resizeConstraint.side) + 4;
 
-      this._ctx.setLineDash([0, 1]);
       this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-      this._ctx.beginPath();
-      this._ctx.moveTo(0, 0);
-      this._ctx.lineTo(this._container.width, 0);
-      this._ctx.lineTo(this._container.width, this._container.height);
-      this._ctx.lineTo(0, this._container.height);
-      this._ctx.lineTo(0, 0);
-      this._ctx.moveTo(startX, startY);
-      this._ctx.lineTo(middleX, startY);
-      this._ctx.lineTo(middleX, middleY);
-      this._ctx.lineTo(startX, middleY);
-      this._ctx.lineTo(startX, startY);
-      this._ctx.closePath();
-      this._ctx.stroke();
-      this._ctx.fill('evenodd');
+
+      this._ctx.fillRect(0, 0, startX, this._container.height);
+      this._ctx.fillRect(startX, 0, this._container.width, startY);
+      this._ctx.fillRect(middleX, startY, this._container.width, this._container.height);
+      this._ctx.fillRect(startX, middleY, middleX - startX, this._container.height);
 
       // вывод размера изображения
       var a = this._image.naturalWidth;
