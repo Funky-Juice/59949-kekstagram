@@ -92,6 +92,7 @@
       this._ctx.lineWidth = 6;
       // Цвет обводки.
       this._ctx.fillStyle = '#ffe753';
+      this._ctx.strokeStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
       // расстояние между соседними штрихами.
       this._ctx.setLineDash([15, 10]);
@@ -112,37 +113,92 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
-      // Отрисовка прямоугольника зоны кадрирования точками.
+      // зона кадрирования отрисована Z линией
       var someX = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var someY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var imgWidth = this._resizeConstraint.side - this._ctx.lineWidth / 2;
       var imgHeight = this._resizeConstraint.side - this._ctx.lineWidth / 2;
 
-      this._ctx.beginPath();
+      var stepSize = 30;
 
-      for (var i = 0; i < imgWidth; i += 10) {
-        this._ctx.moveTo(someX + i, someY);
-        this._ctx.arc(someX + i, someY, 3, 0, 2 * Math.PI, false);
+      this._ctx.setLineDash([0, 0]);
+
+      var drawLineX = function(ctx, size, x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + size / 2, y - size / 2);
+        ctx.lineTo(x + size, y);
+        ctx.stroke();
+      };
+
+      for (var i = 0; i < imgWidth; i += 30) {
+        drawLineX(this._ctx, stepSize, someX + i, someY);
+        
+      };
+
+      var drawLineY = function(ctx, size, x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - size / 2, y + size / 2);
+        ctx.lineTo(x, y + size);
+        ctx.stroke();
+      };
+
+      for (var i = 0; i < imgHeight; i += 30) {
+        drawLineY(this._ctx, stepSize, someX + imgWidth, someY + i);
+      };
+
+      var drawLineInvX = function(ctx, size, x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - size / 2, y + size / 2);
+        ctx.lineTo(x - size, y);
+        ctx.stroke();
+      };
+
+      for (var i = 0; i < imgWidth; i += 30) {
+        drawLineInvX(this._ctx, stepSize, (someX + imgWidth) - i, someY + imgHeight);
+      };
+
+      var drawLineInvY = function(ctx, size, x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + size / 2, y - size / 2);
+        ctx.lineTo(x, y - size);
+        ctx.stroke();
+      };
+
+      for (var i = 0; i < imgHeight; i += 30) {
+        drawLineInvY(this._ctx, stepSize, someX, (someY + imgHeight) - i);
       }
 
-      for (i = 0; i < imgHeight; i += 10) {
-        this._ctx.moveTo(someX + imgWidth, someY + i);
-        this._ctx.arc(someX + imgWidth, someY + i, 3, 0, 2 * Math.PI, false);
-      }
+      // Отрисовка прямоугольника зоны кадрирования точками.      
 
-      for (i = 0; i < imgWidth; i += 10) {
-        this._ctx.moveTo((someX + imgWidth) - i, someY + imgHeight);
-        this._ctx.arc((someX + imgWidth) - i, someY + imgHeight, 3, 0, 2 * Math.PI, false);
-      }
+      // this._ctx.beginPath();
 
-      for (i = 0; i < imgHeight; i += 10) {
-        this._ctx.moveTo(someX, (someY + imgHeight) - i);
-        this._ctx.arc(someX, (someY + imgHeight) - i, 3, 0, 2 * Math.PI, false);
-      }
+      // for (var i = 0; i < imgWidth; i += 10) {
+      //   this._ctx.moveTo(someX + i, someY);
+      //   this._ctx.arc(someX + i, someY, 3, 0, 2 * Math.PI, false);
+      // }
 
-      this._ctx.closePath();
+      // for (i = 0; i < imgHeight; i += 10) {
+      //   this._ctx.moveTo(someX + imgWidth, someY + i);
+      //   this._ctx.arc(someX + imgWidth, someY + i, 3, 0, 2 * Math.PI, false);
+      // }
 
-      this._ctx.fill();
+      // for (i = 0; i < imgWidth; i += 10) {
+      //   this._ctx.moveTo((someX + imgWidth) - i, someY + imgHeight);
+      //   this._ctx.arc((someX + imgWidth) - i, someY + imgHeight, 3, 0, 2 * Math.PI, false);
+      // }
+
+      // for (i = 0; i < imgHeight; i += 10) {
+      //   this._ctx.moveTo(someX, (someY + imgHeight) - i);
+      //   this._ctx.arc(someX, (someY + imgHeight) - i, 3, 0, 2 * Math.PI, false);
+      // }
+
+      // this._ctx.closePath();
+
+      // this._ctx.fill();
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -153,17 +209,17 @@
       this._ctx.restore();
 
       //отрисовка рамки вокруг зоны кадрирования
-      var startX = ((this._container.width - this._resizeConstraint.side) / 2) - 6;
-      var startY = ((this._container.height - this._resizeConstraint.side) / 2) - 6;
-      var middleX = (startX + this._resizeConstraint.side) + 4;
-      var middleY = (startY + this._resizeConstraint.side) + 4;
+      // var startX = ((this._container.width - this._resizeConstraint.side) / 2) - 6;
+      // var startY = ((this._container.height - this._resizeConstraint.side) / 2) - 6;
+      // var middleX = (startX + this._resizeConstraint.side) + 4;
+      // var middleY = (startY + this._resizeConstraint.side) + 4;
 
-      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      // this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 
-      this._ctx.fillRect(0, 0, startX, this._container.height);
-      this._ctx.fillRect(startX, 0, this._container.width, startY);
-      this._ctx.fillRect(middleX, startY, this._container.width, this._container.height);
-      this._ctx.fillRect(startX, middleY, middleX - startX, this._container.height);
+      // this._ctx.fillRect(0, 0, startX, this._container.height);
+      // this._ctx.fillRect(startX, 0, this._container.width, startY);
+      // this._ctx.fillRect(middleX, startY, this._container.width, this._container.height);
+      // this._ctx.fillRect(startX, middleY, middleX - startX, this._container.height);
 
       // вывод размера изображения
       var a = this._image.naturalWidth;
