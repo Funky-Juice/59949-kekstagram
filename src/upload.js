@@ -79,11 +79,11 @@
   resizeY.value = 30;
   resizeSize.value = 50;
 
-  function resizeFormIsValid() {    
+  function resizeFormIsValid() {
     if ((resizeX.value + resizeSize.value < 200) && (resizeY.value + resizeSize.value < 200) && (resizeX.value > 0 && resizeY.value > 0)) {
       return true;
     } else {
-      alert(resizeY.value)
+      return false;
     }
   }
 
