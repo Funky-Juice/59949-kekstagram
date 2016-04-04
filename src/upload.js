@@ -80,7 +80,7 @@
   resizeSize.value = 50;
 
   function resizeFormIsValid() {    
-    if ((20 + 50 < 200) && (30 + 50 < 200) && (20 > 0 && 30 > 0)) {
+    if ((resizeX.value + resizeSize.value < 200) && (resizeY.value + resizeSize.value < 200) && (resizeX.value > 0 && resizeY.value > 0)) {
       return true;
     } else {
       alert(resizeY.value)
