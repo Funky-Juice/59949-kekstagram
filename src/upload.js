@@ -71,8 +71,20 @@
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
-  function resizeFormIsValid() {
-    return true;
+  var resizeX = document.querySelector('#resize-x');
+  var resizeY = document.querySelector('#resize-y');
+  var resizeSize = document.querySelector('#resize-size');
+
+  resizeX.value = 20;
+  resizeY.value = 30;
+  resizeSize.value = 50;
+
+  function resizeFormIsValid() {    
+    if ((20 + 50 < 200) && (30 + 50 < 200) && (20 > 0 && 30 > 0)) {
+      return true;
+    } else {
+      alert(resizeY.value)
+    }
   }
 
   /**
