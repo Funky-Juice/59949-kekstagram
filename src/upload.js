@@ -91,15 +91,15 @@
   }
 
   resizeX.oninput = function() {
-  resizeFormIsValid();
+    resizeFormIsValid();
   };
 
   resizeY.oninput = function() {
-  resizeFormIsValid();
+    resizeFormIsValid();
   };
 
   resizeSize.oninput = function() {
-  resizeFormIsValid();
+    resizeFormIsValid();
   };
 
 
