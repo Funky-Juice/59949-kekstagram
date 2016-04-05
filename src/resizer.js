@@ -113,7 +113,11 @@
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
 
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> refs/remotes/htmlacademy-javascript/master
       var someX = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var someY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var imgWidth = this._resizeConstraint.side - this._ctx.lineWidth / 2;
