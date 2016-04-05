@@ -85,21 +85,21 @@
       resizeFwd.removeAttribute('disabled');
       return true;
     } else {
-      resizeFwd.setAttribute('disabled','disabled');
+      resizeFwd.setAttribute('disabled', 'disabled');
       return false;
     }
   }
 
   resizeX.oninput = function() {
-    resizeFormIsValid()
+  resizeFormIsValid();
   };
 
-   resizeY.oninput = function() {
-    resizeFormIsValid();
+  resizeY.oninput = function() {
+  resizeFormIsValid();
   };
 
-   resizeSize.oninput = function() {
-    resizeFormIsValid();
+  resizeSize.oninput = function() {
+  resizeFormIsValid();
   };
 
 
