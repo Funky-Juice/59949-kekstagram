@@ -74,18 +74,34 @@
   var resizeX = document.querySelector('#resize-x');
   var resizeY = document.querySelector('#resize-y');
   var resizeSize = document.querySelector('#resize-size');
+  var resizeFwd = document.querySelector('#resize-fwd');
 
-  resizeX.value = 20;
-  resizeY.value = 30;
-  resizeSize.value = 50;
+  resizeX.value = 0;
+  resizeY.value = 0;
+  resizeSize.value = 200;
 
   function resizeFormIsValid() {
-    if ((resizeX.value + resizeSize.value < 200) && (resizeY.value + resizeSize.value < 200) && (resizeX.value > 0 && resizeY.value > 0)) {
+    if ((+resizeX.value + +resizeSize.value < currentResizer._image.naturalWidth) && (+resizeY.value + +resizeSize.value < currentResizer._image.naturalHeight) && (resizeX.value >= 0 && resizeY.value >= 0)) {
+      resizeFwd.removeAttribute('disabled');
       return true;
     } else {
+      resizeFwd.setAttribute('disabled','disabled');
       return false;
     }
   }
+
+  resizeX.oninput = function() {
+    resizeFormIsValid()
+  };
+
+   resizeY.oninput = function() {
+    resizeFormIsValid();
+  };
+
+   resizeSize.oninput = function() {
+    resizeFormIsValid();
+  };
+
 
   /**
    * Форма загрузки изображения.
