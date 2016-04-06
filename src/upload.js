@@ -249,7 +249,7 @@
 
   var browserCookies = require('browser-cookies'); 
 
-  //key.value = browserCookies.get('key') || 2;
+  key.value = browserCookies.get('key') || 2;
 
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
