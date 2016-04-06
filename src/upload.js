@@ -7,8 +7,6 @@
 
 'use strict';
 
-var browserCookies = require('browser-cookies');
-
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -249,15 +247,17 @@ var browserCookies = require('browser-cookies');
    * @param {Event} evt
    */
 
-  filterMap.value = cookies.get('filterMap') || 2;
+  var browserCookies = require('browser-cookies'); 
+
+  //key.value = browserCookies.get('key') || 2;
 
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
 
-    var dateToExpire = Date.now() + (Date.now() - (+ new Date(2015, 9, 13)));
+    var dateToExpire = Date.now() + (Date.now() - (+new Date(2015, 9, 13)));
     var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-    cookies.set('filterMap', filterMap.value, {
+    browserCookies.set('key', key.value, {
       expires: formattedDateToExpire
     });
 
@@ -279,8 +279,8 @@ var browserCookies = require('browser-cookies');
       // навсегда.
       filterMap = {
         'none': 'filter-none',
-        'chrome': 'filter-chrome',
-        'sepia': 'filter-sepia'
+        'chrome': 'filter-sepia',
+        'sepia': 'filter-chrome'
       };
     }
 
