@@ -7,6 +7,8 @@
 
 'use strict';
 
+var browserCookies = require('browser-cookies');
+
 (function() {
   /** @enum {string} */
   var FileType = {
@@ -246,8 +248,18 @@
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
+
+  filterMap.value = cookies.get('filterMap') || 2;
+
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
+
+    var dateToExpire = Date.now() + (Date.now() - (+ new Date(2015, 9, 13)));
+    var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+
+    cookies.set('filterMap', filterMap.value, {
+      expires: formattedDateToExpire
+    });
 
     cleanupResizer();
     updateBackground();
