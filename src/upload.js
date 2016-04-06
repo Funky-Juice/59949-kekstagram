@@ -247,9 +247,9 @@
    * @param {Event} evt
    */
 
-  var browserCookies = require('browser-cookies'); 
+  var browserCookies = require('browser-cookies');
 
-  key.value = browserCookies.get('key') || 2;
+  //filterMap.value = browserCookies.get('filterMap') || 2;
 
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
@@ -257,7 +257,7 @@
     var dateToExpire = Date.now() + (Date.now() - (+new Date(2015, 9, 13)));
     var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('key', key.value, {
+    browserCookies.set('filterMap', filterMap.value, {
       expires: formattedDateToExpire
     });
 
@@ -279,8 +279,8 @@
       // навсегда.
       filterMap = {
         'none': 'filter-none',
-        'chrome': 'filter-sepia',
-        'sepia': 'filter-chrome'
+        'chrome': 'filter-chrome',
+        'sepia': 'filter-sepia'
       };
     }
 
