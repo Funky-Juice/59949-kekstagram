@@ -257,12 +257,12 @@
       }
     }
     return '';
-  }
+  };
 
   var someNewVar = browserCookies.get('selectedFilter') || false;
 
-  if (someNewVar(checked == true)) {
-    filterForm.onchange;
+  if (someNewVar.checked == true) {
+    filterForm.onchange();
   }
 
   filterForm.onsubmit = function(evt) {
@@ -274,7 +274,7 @@
     browserCookies.set('selectedFilter', inputFilterId(), {
       expires: formattedDateToExpire
     });
-//alert(selectedFilter)
+
     cleanupResizer();
     updateBackground();
 
