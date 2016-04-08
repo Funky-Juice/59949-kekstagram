@@ -126,8 +126,6 @@
    */
   var filterImage = filterForm.querySelector('.filter-image-preview');
 
-  var filterInput = 
-
   /**
    * @type {HTMLElement}
    */
@@ -248,12 +246,24 @@
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-
   var browserCookies = require('browser-cookies');
 
-//alert(filterId)
+  var inputFilterId = function() {
+    var someVar = filterForm.elements['upload-filter'];
 
-  //filterMap.value = browserCookies.get('filterMap') || 2;
+    for (var i = 0; i < someVar.length; i++) {
+      if(someVar[i].checked) {
+        return someVar[i].id;
+      }
+    }
+    return '';
+  }
+
+  var someNewVar = browserCookies.get('selectedFilter') || false;
+
+  if (someNewVar(checked == true)) {
+    filterForm.onchange;
+  }
 
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
@@ -261,12 +271,10 @@
     var dateToExpire = Date.now() + (Date.now() - (+new Date(2015, 9, 13)));
     var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('filterMap', 'selectedFilter', {
+    browserCookies.set('selectedFilter', inputFilterId(), {
       expires: formattedDateToExpire
     });
-    
-
-
+//alert(selectedFilter)
     cleanupResizer();
     updateBackground();
 
@@ -292,14 +300,12 @@
 
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
       return item.checked;
-    })[0].value;    
+    })[0].value;
 
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-    var filterId = filterMap[selectedFilter];
-    
   };
 
   cleanupResizer();
