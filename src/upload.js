@@ -261,7 +261,7 @@
 
   var someNewVar = browserCookies.get('selectedFilter') || false;
 
-  if (someNewVar.checked == true) {
+  if (someNewVar.checked === true) {
     filterForm.onchange();
   }
 
