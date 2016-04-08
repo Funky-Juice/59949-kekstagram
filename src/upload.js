@@ -271,12 +271,12 @@
     var today = new Date();
     var birthYear = today.getFullYear();
 
-    if(+today > +new Date(birthYear,9,13)) {
-      var dateToExpire = +today + (+today - (+new Date(birthYear,9,13)));
+    if(+today > +new Date(birthYear, 9, 13)) {
+      var dateToExpire = +today + (+today - (+new Date(birthYear, 9, 13)));
     } else {
-      dateToExpire = +today + (+today - (+new Date(birthYear - 1,9,13)));
+      dateToExpire = +today + (+today - (+new Date(birthYear - 1, 9, 13)));
     }
-    
+
     var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
     browserCookies.set('selectedFilter', inputFilterId(), {
