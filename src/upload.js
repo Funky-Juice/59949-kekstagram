@@ -248,21 +248,25 @@
    */
   var browserCookies = require('browser-cookies');
 
-  var inputFilterId = function() {
-    var someVar = filterForm.elements['upload-filter'];
+  var chekedFilterId = function() {
+    var inputField = filterForm.elements['upload-filter'];
 
-    for (var i = 0; i < someVar.length; i++) {
-      if(someVar[i].checked) {
-        return someVar[i].id;
+    for (var i = 0; i < inputField.length; i++) {
+      if(inputField[i].checked) {
+        return inputField[i].id;
       }
     }
     return '';
   };
 
-  var someNewVar = browserCookies.get('selectedFilter') || false;
+  var filterCookie = browserCookies.get('selectedFilter') || false;
 
-  if (someNewVar.checked) {
+  var checkedFormId = filterForm.elements[filterCookie];
+
+  if (checkedFormId) {
     filterForm.onchange();
+  } else {
+    return
   }
 
   filterForm.onsubmit = function(evt) {
@@ -279,7 +283,7 @@
 
     var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-    browserCookies.set('selectedFilter', inputFilterId(), {
+    browserCookies.set('selectedFilter', chekedFilterId(), {
       expires: formattedDateToExpire
     });
 
