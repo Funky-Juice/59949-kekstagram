@@ -266,7 +266,7 @@
   if (checkedFormId) {
     filterForm.onchange();
   } else {
-    return
+    return;
   }
 
   filterForm.onsubmit = function(evt) {
