@@ -286,7 +286,7 @@
 
   var checkedFormId = filterForm.elements[filterCookie];
 
-  checkedFormId.checked = true
+  checkedFormId.checked = true;
 
   if (checkedFormId) {
     filterFormChangeHandler();
