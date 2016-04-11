@@ -241,26 +241,23 @@
     resizeForm.classList.remove('invisible');
   };
 
-  /**
-   * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
-   * записав сохраненный фильтр в cookie.
-   * @param {Event} evt
-   */
-  filterForm.onsubmit = function(evt) {
-    evt.preventDefault();
+  //Получаем ID выбранного фильтра
+  var chekedFilterId = function() {
+    var inputField = filterForm.elements['upload-filter'];
 
-    cleanupResizer();
-    updateBackground();
-
-    filterForm.classList.add('invisible');
-    uploadForm.classList.remove('invisible');
+    for (var i = 0; i < inputField.length; i++) {
+      if(inputField[i].checked) {
+        return inputField[i].id;
+      }
+    }
+    return '';
   };
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  function filterFormChangeHandler() {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -280,7 +277,57 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+  }
+
+  //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
+  var browserCookies = require('browser-cookies');
+
+  var filterCookie = browserCookies.get('selectedFilter') || false;
+
+  var checkedFormId = filterForm.elements[filterCookie];
+
+  if (checkedFormId) {
+    checkedFormId.checked = true;
+
+    filterFormChangeHandler();
+  }
+
+  /**
+   * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
+   * записав сохраненный фильтр в cookie.
+   * @param {Event} evt
+   */
+
+  filterForm.onsubmit = function(evt) {
+    evt.preventDefault();
+
+    var today = new Date();
+    var birthYear = today.getFullYear();
+
+    if(+today > +new Date(birthYear, 9, 13)) {
+      var dateToExpire = +today + (+today - (+new Date(birthYear, 9, 13)));
+    } else {
+      dateToExpire = +today + (+today - (+new Date(birthYear - 1, 9, 13)));
+    }
+
+    var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+
+    browserCookies.set('selectedFilter', chekedFilterId(), {
+      expires: formattedDateToExpire
+    });
+
+    cleanupResizer();
+    updateBackground();
+
+    filterForm.classList.add('invisible');
+    uploadForm.classList.remove('invisible');
   };
+
+  /**
+   * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
+   * выбранному значению в форме.
+   */
+  filterForm.onchange = filterFormChangeHandler;
 
   cleanupResizer();
   updateBackground();
