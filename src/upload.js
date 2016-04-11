@@ -253,13 +253,6 @@
     return '';
   };
 
-  //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
-  var browserCookies = require('browser-cookies');
-
-  var filterCookie = browserCookies.get('selectedFilter') || false;
-
-  var checkedFormId = filterForm.elements[filterCookie];
-
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
@@ -285,6 +278,15 @@
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
   }
+
+  //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
+  var browserCookies = require('browser-cookies');
+
+  var filterCookie = browserCookies.get('selectedFilter') || false;
+
+  var checkedFormId = filterForm.elements[filterCookie];
+
+  checkedFormId.checked = true
 
   if (checkedFormId) {
     filterFormChangeHandler();
