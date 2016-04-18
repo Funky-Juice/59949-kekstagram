@@ -1,5 +1,7 @@
 'use strict';
 
+/* global pictures */
+
 (function() {
 
   var filtersForm = document.querySelector('.filters');
@@ -47,7 +49,7 @@
     }, IMAGE_LOAD_TIMEOUT);
 
     return pictureElement;
-  }
+  };
 
   pictures.forEach(function(picture) {
     getPictureElement(picture, picturesContainer);
