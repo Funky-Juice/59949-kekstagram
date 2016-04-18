@@ -78,7 +78,7 @@
   </div>
 </div>
 
-<template id="picture-template">
+<template id="picture-template" style="display: none">
   <a href="" class="picture">
     <img src="" width="182" height="182">
     <span class="picture-stats">
@@ -87,7 +87,15 @@
     </span>
   </a>
 </template>
+
 <script src="js/main.js"></script>
+<script>
+  var pictures = [];
+  function __picturesLoadCallback(data){
+    pictures = data;
+  }
+</script>
+<script src="//up.htmlacademy.ru/assets/js_intensive/jsonp/pictures.js"></script>
 
 </body>
 </html>
