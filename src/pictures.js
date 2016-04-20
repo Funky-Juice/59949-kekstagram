@@ -1,11 +1,14 @@
 'use strict';
 
-/* global pictures */
-
 (function() {
 
   var filtersForm = document.querySelector('.filters');
-  filtersForm.classList.add('hidden');
+
+  var filtersHidden = filtersForm.querySelectorAll('.filters-item');
+
+  for(var i = 0; i < filtersHidden.length; i++) {
+    filtersHidden[i].hidden = true;
+  };
 
   var picturesContainer = document.querySelector('.pictures');
 
@@ -27,6 +30,7 @@
    */
   var getPictureElement = function(data, container) {
     var pictureElement = elementToClone.cloneNode(true);
+    pictureElement.querySelector('img').src = data.url;
     container.appendChild(pictureElement);
 
     var contentImage = new Image();
@@ -34,7 +38,6 @@
 
     contentImage.onload = function() {
       clearTimeout(contentLoadTimeout);
-      pictureElement.style.contentImage = 'url(\'' + contentImage.src + '\')';
     };
 
     contentImage.onerror = function() {
@@ -51,10 +54,14 @@
     return pictureElement;
   };
 
-  pictures.forEach(function(picture) {
+  window.pictures.forEach(function(picture) {
     getPictureElement(picture, picturesContainer);
   });
 
-  //filtersForm.classList.remove('hidden');
+  filtersForm.classList.remove('hidden');
+
+  for(var i = 0; i < filtersHidden.length; i++) {
+    filtersHidden[i].hidden = false;
+  };
 
 })();
