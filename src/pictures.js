@@ -8,7 +8,7 @@
 
   for(var i = 0; i < filtersHidden.length; i++) {
     filtersHidden[i].hidden = true;
-  };
+  }
 
   var picturesContainer = document.querySelector('.pictures');
 
@@ -60,8 +60,8 @@
 
   filtersForm.classList.remove('hidden');
 
-  for(var i = 0; i < filtersHidden.length; i++) {
+  for(i = 0; i < filtersHidden.length; i++) {
     filtersHidden[i].hidden = false;
-  };
+  }
 
 })();
