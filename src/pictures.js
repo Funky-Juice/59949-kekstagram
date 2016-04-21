@@ -73,21 +73,21 @@
 
   picturesContainer.classList.add('pictures-loading');
 
-  /** @param {Array.<Object>} pictures */
-  var renderPictures = function(pictures) {
+  /** @param {Array.<Object>} filteredPictures */
+  var renderPictures = function(filteredPictures) {
     picturesContainer.innerHTML = '';
 
-    pictures.forEach(function(picture) {
+    filteredPictures.forEach(function(picture) {
       getPictureElement(picture, picturesContainer);
     });
   };
 
   /**
-   * @param {Array.<Object>} pictures
+   * @param {Array.<Object>} sortPictures
    * @param {Filter} filter
    */
-  var getFilteredPictures = function(pictures, filter) {
-    var picturesToFilter = pictures.slice(0);
+  var getFilteredPictures = function(sortPictures, filter) {
+    var picturesToFilter = sortPictures.slice(0);
 
     switch (filter) {
       case Filter.POPULAR:
@@ -129,18 +129,18 @@
   var setFiltersEnabled = function(enabled) {
     var filters = filtersForm.querySelectorAll('.filters-radio');
     for (var i = 0; i < filters.length; i++) {
-      filters[i].onclick = enabled ? function(evt) {
+      filters[i].onclick = enabled ? function() {
         setFilterEnabled(this.id);
       } : null;
     }
   };
 
   /** @param {function(Array.<Object>)} callback */
-  var getPictures = function (callback) {
+  var getPictures = function(callback) {
     var xhr = new XMLHttpRequest();
 
     /** @param {ProgressEvent} */
-    xhr.onload = function (evt) {
+    xhr.onload = function(evt) {
       var loadedData = JSON.parse(evt.target.response);
       callback(loadedData);
     };
