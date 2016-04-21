@@ -4,11 +4,7 @@
 
   var filtersForm = document.querySelector('.filters');
 
-  var filtersHidden = filtersForm.querySelectorAll('.filters-item');
-
-  for(var i = 0; i < filtersHidden.length; i++) {
-    filtersHidden[i].hidden = true;
-  }
+  filtersForm.classList.add('hidden');
 
   var picturesContainer = document.querySelector('.pictures');
 
@@ -30,7 +26,7 @@
    */
   var getPictureElement = function(data, container) {
     var pictureElement = elementToClone.cloneNode(true);
-    pictureElement.querySelector('img').src = data.url;
+
     container.appendChild(pictureElement);
 
     var contentImage = new Image();
@@ -38,6 +34,7 @@
 
     contentImage.onload = function() {
       clearTimeout(contentLoadTimeout);
+      pictureElement.querySelector('img').src = data.url;
     };
 
     contentImage.onerror = function() {
@@ -59,9 +56,4 @@
   });
 
   filtersForm.classList.remove('hidden');
-
-  for(i = 0; i < filtersHidden.length; i++) {
-    filtersHidden[i].hidden = false;
-  }
-
 })();
