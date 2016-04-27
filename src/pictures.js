@@ -36,7 +36,7 @@
   var DEFAULT_FILTER = Filter.POPULAR;
 
   /** @constant {number} */
-  var DAYS_FILTER_COUNT = 14;
+  var DAYS_COUNT = 14;
 
   /**
    * @param {Object} data
@@ -97,12 +97,12 @@
         break;
 
       case Filter.NEW:
-        var a = new Date();
-        a.setDate(a.getDate() - DAYS_FILTER_COUNT);
-        picturesToFilter = picturesToFilter.filter(function(b) {
-          return Date.parse(b.date) - a > 0;
-        }).sort(function(x, y) {
-          return Date.parse(y.date) - Date.parse(x.date);
+        var daysFilterCount = new Date();
+        daysFilterCount.setDate(daysFilterCount.getDate() - DAYS_COUNT);
+        picturesToFilter = picturesToFilter.filter(function(y) {
+          return Date.parse(y.date) - daysFilterCount > 0;
+        }).sort(function(a, b) {
+          return Date.parse(b.date) - Date.parse(a.date);
         });
         break;
 
