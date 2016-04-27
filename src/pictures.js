@@ -35,6 +35,9 @@
   /** @constant {Filter} */
   var DEFAULT_FILTER = Filter.POPULAR;
 
+  /** @constant {number} */
+  var DAYS_FILTER_COUNT = 14;
+
   /**
    * @param {Object} data
    * @param {HTMLElement} container
@@ -55,8 +58,6 @@
 
     contentImage.onerror = function() {
       pictureElement.classList.add('picture-load-failure');
-
-      picturesContainer.classList.add('pictures-failure');
     };
 
     contentImage.src = data.url;
@@ -64,7 +65,6 @@
     contentLoadTimeout = setTimeout(function() {
       contentImage.src = '';
       pictureElement.classList.add('picture-load-failure');
-      picturesContainer.classList.add('pictures-failure');
     }, IMAGE_LOAD_TIMEOUT);
 
     container.appendChild(pictureElement);
@@ -97,8 +97,12 @@
         break;
 
       case Filter.NEW:
-        picturesToFilter.sort(function(a, b) {
-          return Date.parse(b.date) - Date.parse(a.date);
+        var a = new Date();
+        a.setDate(a.getDate() - DAYS_FILTER_COUNT);
+        picturesToFilter = picturesToFilter.filter(function(b) {
+          return Date.parse(b.date) - a > 0;
+        }).sort(function(x, y) {
+          return Date.parse(y.date) - Date.parse(x.date);
         });
         break;
 
@@ -116,22 +120,15 @@
   var setFilterEnabled = function(filter) {
     var filteredPictures = getFilteredPictures(pictures, filter);
     renderPictures(filteredPictures);
-
-    //var activeFilter = filtersForm.querySelector(checked);
-    //if (activeFilter) {
-    //  activeFilter.removeAttribute('checked');
-    //}
-    //var filterToActivate = document.getElementById(filter);
-    //filterToActivate.setAttribute('checked', 'checked');
   };
 
   /** @param {boolean} enabled */
-  var setFiltersEnabled = function(enabled) {
+  var setFiltersEnabled = function() {
     var filters = filtersForm.querySelectorAll('.filters-radio');
     for (var i = 0; i < filters.length; i++) {
-      filters[i].onclick = enabled ? function() {
+      filters[i].onclick = function() {
         setFilterEnabled(this.id);
-      } : null;
+      };
     }
   };
 
@@ -139,10 +136,20 @@
   var getPictures = function(callback) {
     var xhr = new XMLHttpRequest();
 
+    xhr.timeout = IMAGE_LOAD_TIMEOUT;
+
     /** @param {ProgressEvent} */
     xhr.onload = function(evt) {
       var loadedData = JSON.parse(evt.target.response);
       callback(loadedData);
+    };
+
+    xhr.onerror = function() {
+      picturesContainer.classList.add('pictures-failure');
+    };
+
+    xhr.ontimeout = function() {
+      picturesContainer.classList.add('pictures-failure');
     };
 
     xhr.open('GET', PICTURES_LOAD_URL, true);
