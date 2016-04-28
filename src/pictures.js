@@ -49,7 +49,6 @@
     var contentImage = new Image();
     var contentLoadTimeout;
 
-    /** @param {ProgressEvent} evt */
     contentImage.onload = function() {
       clearTimeout(contentLoadTimeout);
 
@@ -122,7 +121,6 @@
     renderPictures(filteredPictures);
   };
 
-  /** @param {boolean} enabled */
   var setFiltersEnabled = function() {
     var filters = filtersForm.querySelectorAll('.filters-radio');
     for (var i = 0; i < filters.length; i++) {
@@ -158,11 +156,10 @@
 
   getPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    setFiltersEnabled(true);
+    setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
+    picturesContainer.classList.remove('pictures-loading');
   });
-
-  picturesContainer.classList.remove('pictures-loading');
 
   filtersForm.classList.remove('hidden');
 })();
