@@ -89,12 +89,6 @@
     var picturesToFilter = sortPictures.slice(0);
 
     switch (filter) {
-      case Filter.POPULAR:
-        picturesToFilter.sort(function(a, b) {
-          return b.likes - a.likes;
-        });
-        break;
-
       case Filter.NEW:
         var daysFilterCount = new Date();
         daysFilterCount.setDate(daysFilterCount.getDate() - DAYS_COUNT);
@@ -140,14 +134,17 @@
     xhr.onload = function(evt) {
       var loadedData = JSON.parse(evt.target.response);
       callback(loadedData);
+      picturesContainer.classList.remove('pictures-loading');
     };
 
     xhr.onerror = function() {
       picturesContainer.classList.add('pictures-failure');
+      picturesContainer.classList.remove('pictures-loading');
     };
 
     xhr.ontimeout = function() {
       picturesContainer.classList.add('pictures-failure');
+      picturesContainer.classList.remove('pictures-loading');
     };
 
     xhr.open('GET', PICTURES_LOAD_URL, true);
@@ -158,7 +155,6 @@
     pictures = loadedPictures;
     setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
-    picturesContainer.classList.remove('pictures-loading');
   });
 
   filtersForm.classList.remove('hidden');
