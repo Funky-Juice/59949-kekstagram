@@ -200,8 +200,7 @@
     window.addEventListener('scroll', function(evt) {
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(function() {
-        if (
-          isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+        if (isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
           pageNumber++;
           renderPictures(filteredPictures, pageNumber);
         }
