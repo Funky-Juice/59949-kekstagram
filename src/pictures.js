@@ -210,7 +210,9 @@
 
   getPictures(function(loadedPictures) {
     pictures = loadedPictures;
-   
+    setFiltersEnabled();
+    setFilterEnabled(DEFAULT_FILTER);
+    setScrollEnabled();
   });
 
   filtersForm.classList.remove('hidden');
