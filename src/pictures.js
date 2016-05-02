@@ -25,6 +25,15 @@
   /** @type {Array.<Object>} */
   var pictures = [];
 
+  /** @type {Array.<Object>} */
+  var filteredPictures = [];
+
+  /** @constant {number} */
+  var PAGE_SIZE = 12;
+
+  /** @type {number} */
+  var pageNumber = 0;
+
   /** @enum {number} */
   var Filter = {
     'POPULAR': 'filter-popular',
@@ -72,11 +81,19 @@
 
   picturesContainer.classList.add('pictures-loading');
 
-  /** @param {Array.<Object>} filteredPictures */
-  var renderPictures = function(filteredPictures) {
-    picturesContainer.innerHTML = '';
+  /** @param {Array.<Object>} filteredPictures
+   *  @param {number} page
+   *  @param {boolean=} replace
+   */
+  var renderPictures = function(filteredPictures, page, replace) {
+    if (replace) {
+      picturesContainer.innerHTML = '';
+    }
 
-    filteredPictures.forEach(function(picture) {
+    var from = page * PAGE_SIZE;
+    var to = from + PAGE_SIZE;
+
+    filteredPictures.slice(from, to).forEach(function(picture) {
       getPictureElement(picture, picturesContainer);
     });
   };
@@ -111,17 +128,25 @@
 
   /** @param {Filter} filter */
   var setFilterEnabled = function(filter) {
-    var filteredPictures = getFilteredPictures(pictures, filter);
-    renderPictures(filteredPictures);
+    filteredPictures = getFilteredPictures(pictures, filter);
+    pageNumber = 0;
+    renderPictures(filteredPictures, pageNumber, true);
   };
 
   var setFiltersEnabled = function() {
-    var filters = filtersForm.querySelectorAll('.filters-radio');
-    for (var i = 0; i < filters.length; i++) {
-      filters[i].onclick = function() {
-        setFilterEnabled(this.id);
-      };
-    }
+    filtersForm.addEventListener('click', function(evt) {
+      if (evt.target.classList.contains('filters-radio')) {
+        setFilterEnabled(evt.target.id);
+      }
+    });
+
+    filtersForm.addEventListener('keydown', function(evt) {
+    if (evt.target.classList.contains('filters-radio') &&
+      [13, 32].indexOf(evt.keyCode) > -1) {
+      evt.preventDefault();
+      setFilterEnabled(evt.target.id);
+      }
+    });
   };
 
   /** @param {function(Array.<Object>)} callback */
@@ -151,10 +176,44 @@
     xhr.send();
   };
 
+  ///** @return {boolean} */
+  //var isBottomReached = function() {
+  //  var GAP = 100;
+  //  var footerElement = document.querySelector('footer');
+  //  var footerPosition = footerElement.getBoundingClientRect();
+  //  return footerPosition.top - window.innerHeight - GAP <= 0;
+  //};
+
+  /**
+   * @param {Array} hotels
+   * @param {number} page
+   * @param {number} pageSize
+   * @return {boolean}
+   */
+  var isNextPageAvailable = function(pictures, page, pageSize) {
+    return page < Math.floor(pictures.length / pageSize);
+  };
+
+  var setScrollEnabled = function() {
+    var scrollTimeout;
+
+    window.addEventListener('scroll', function(evt) {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        if (
+          isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+          pageNumber++;
+          renderPictures(filteredPictures, pageNumber);
+        }
+      }, 100);
+    });
+  };
+
   getPictures(function(loadedPictures) {
     pictures = loadedPictures;
     setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
+    setScrollEnabled();
   });
 
   filtersForm.classList.remove('hidden');
