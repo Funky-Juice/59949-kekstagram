@@ -20,7 +20,7 @@
   var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
 
   /** @type {Array.<Object>} */
-  var pictures = [];
+  var picturesArr = [];
 
   /** @type {Array.<Object>} */
   var filteredPictures = [];
@@ -81,13 +81,13 @@
   picturesContainer.classList.add('pictures-loading');
 
   /**
-   * @param {Array} filteredPictures
+   * @param {Array} pictures
    * @param {number} page
    * @param {number} pageSize
    * @return {boolean}
    */
-  var isNextPageAvailable = function(filteredPictures, page, pageSize) {
-    return page < Math.floor(filteredPictures.length / pageSize);
+  var isNextPageAvailable = function(pictures, page, pageSize) {
+    return page < Math.floor(picturesArr.length / pageSize);
   };
 
   /** @return {boolean} */
@@ -97,11 +97,11 @@
     return window.innerHeight - picturesContainerRect.bottom - GAP >= 0;
   };
 
-  /** @param {Array.<Object>} filteredPictures
+  /** @param {Array.<Object>} pictures
    *  @param {number} page
    *  @param {boolean=} replace
    */
-  var renderPictures = function(filteredPictures, page, replace) {
+  var renderPictures = function(pictures, page, replace) {
     if (replace) {
       picturesContainer.innerHTML = '';
     }
@@ -109,7 +109,7 @@
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
 
-    filteredPictures.slice(from, to).forEach(function(picture) {
+    pictures.slice(from, to).forEach(function(picture) {
       getPictureElement(picture, picturesContainer);
     });
   };
@@ -121,7 +121,7 @@
       picturesContainer.innerHTML = '';
     }
     while(isBottomReached() &&
-    isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+    isNextPageAvailable(picturesArr, pageNumber, PAGE_SIZE)) {
       renderPictures(filteredPictures, pageNumber);
       pageNumber++;
     }
@@ -157,7 +157,7 @@
 
   /** @param {Filter} filter */
   var setFilterEnabled = function(filter) {
-    filteredPictures = getFilteredPictures(pictures, filter);
+    filteredPictures = getFilteredPictures(picturesArr, filter);
     renderNextPages(true);
   };
 
@@ -215,7 +215,7 @@
   };
 
   getPictures(function(loadedPictures) {
-    pictures = loadedPictures;
+    picturesArr = loadedPictures;
     setFiltersEnabled();
     setFilterEnabled(DEFAULT_FILTER);
     setScrollEnabled();
