@@ -81,13 +81,13 @@
   picturesContainer.classList.add('pictures-loading');
 
   /**
-   * @param {Array} pictures
+   * @param {Array} filteredPictures
    * @param {number} page
    * @param {number} pageSize
    * @return {boolean}
    */
-  var isNextPageAvailable = function(pictures, page, pageSize) {
-    return page < Math.floor(pictures.length / pageSize);
+  var isNextPageAvailable = function(filteredPictures, page, pageSize) {
+    return page < Math.floor(filteredPictures.length / pageSize);
   };
 
   /** @return {boolean} */
@@ -97,11 +97,11 @@
     return window.innerHeight - picturesContainerRect.bottom - GAP >= 0;
   };
 
-  /** @param {Array.<Object>} pictures
+  /** @param {Array.<Object>} filteredPictures
    *  @param {number} page
    *  @param {boolean=} replace
    */
-  var renderPictures = function(pictures, page, replace) {
+  var renderPictures = function(filteredPictures, page, replace) {
     if (replace) {
       picturesContainer.innerHTML = '';
     }
@@ -109,7 +109,7 @@
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
 
-    pictures.slice(from, to).forEach(function(picture) {
+    filteredPictures.slice(from, to).forEach(function(picture) {
       getPictureElement(picture, picturesContainer);
     });
   };
