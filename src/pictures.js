@@ -92,7 +92,6 @@
 
   /** @return {boolean} */
   var isBottomReached = function() {
-    var GAP = 100;
     var picturesContainerRect = picturesContainer.getBoundingClientRect();
     return window.innerHeight - picturesContainerRect.bottom >= 0;
   };
