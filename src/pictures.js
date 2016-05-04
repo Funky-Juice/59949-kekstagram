@@ -3,11 +3,8 @@
 (function() {
 
   var filtersForm = document.querySelector('.filters');
-
   filtersForm.classList.add('hidden');
-
   var picturesContainer = document.querySelector('.pictures');
-
   var templateElement = document.querySelector('#picture-template');
 
   if ('content' in templateElement) {
@@ -54,6 +51,8 @@
    */
   var getPictureElement = function(data, container) {
     var pictureElement = elementToClone.cloneNode(true);
+    pictureElement.querySelector('.picture-comments').textContent = data.comments;
+    pictureElement.querySelector('.picture-likes').textContent = data.likes;
 
     var contentImage = new Image();
     var contentLoadTimeout;
@@ -81,11 +80,28 @@
 
   picturesContainer.classList.add('pictures-loading');
 
-  /** @param {Array.<Object>} filteredPictures
+  /**
+   * @param {Array} pictures
+   * @param {number} page
+   * @param {number} pageSize
+   * @return {boolean}
+   */
+  var isNextPageAvailable = function(pictures, page, pageSize) {
+    return page < Math.floor(pictures.length / pageSize);
+  };
+
+  /** @return {boolean} */
+  var isBottomReached = function() {
+    var GAP = 100;
+    var picturesContainerRect = picturesContainer.getBoundingClientRect();
+    return window.innerHeight - picturesContainerRect.bottom - GAP >= 0;
+  };
+
+  /** @param {Array.<Object>} pictures
    *  @param {number} page
    *  @param {boolean=} replace
    */
-  var renderPictures = function(filteredPictures, page, replace) {
+  var renderPictures = function(pictures, page, replace) {
     if (replace) {
       picturesContainer.innerHTML = '';
     }
@@ -93,9 +109,22 @@
     var from = page * PAGE_SIZE;
     var to = from + PAGE_SIZE;
 
-    filteredPictures.slice(from, to).forEach(function(picture) {
+    pictures.slice(from, to).forEach(function(picture) {
       getPictureElement(picture, picturesContainer);
     });
+  };
+
+  /** @param {boolean} reset */
+  var renderNextPages = function(reset) {
+    if (reset) {
+      pageNumber = 0;
+      picturesContainer.innerHTML = '';
+    }
+    while(isBottomReached() &&
+    isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
+      renderPictures(filteredPictures, pageNumber);
+      pageNumber++;
+    }
   };
 
   /**
@@ -129,8 +158,7 @@
   /** @param {Filter} filter */
   var setFilterEnabled = function(filter) {
     filteredPictures = getFilteredPictures(pictures, filter);
-    pageNumber = 0;
-    renderPictures(filteredPictures, pageNumber, true);
+    renderNextPages(true);
   };
 
   var setFiltersEnabled = function() {
@@ -141,19 +169,27 @@
     });
 
     filtersForm.addEventListener('keydown', function(evt) {
-    if (evt.target.classList.contains('filters-radio') &&
-      [13, 32].indexOf(evt.keyCode) > -1) {
-      evt.preventDefault();
-      setFilterEnabled(evt.target.id);
+      if (evt.target.classList.contains('filters-radio') &&
+        [13, 32].indexOf(evt.keyCode) > -1) {
+        evt.preventDefault();
+        setFilterEnabled(evt.target.id);
       }
+    });
+  };
+
+  var setScrollEnabled = function() {
+    var scrollTimeout;
+    window.addEventListener('scroll', function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        renderNextPages();
+      }, 100);
     });
   };
 
   /** @param {function(Array.<Object>)} callback */
   var getPictures = function(callback) {
     var xhr = new XMLHttpRequest();
-
-    xhr.timeout = IMAGE_LOAD_TIMEOUT;
 
     /** @param {ProgressEvent} */
     xhr.onload = function(evt) {
@@ -167,6 +203,8 @@
       picturesContainer.classList.remove('pictures-loading');
     };
 
+    xhr.timeout = IMAGE_LOAD_TIMEOUT;
+
     xhr.ontimeout = function() {
       picturesContainer.classList.add('pictures-failure');
       picturesContainer.classList.remove('pictures-loading');
@@ -174,38 +212,6 @@
 
     xhr.open('GET', PICTURES_LOAD_URL, true);
     xhr.send();
-  };
-
-  ///** @return {boolean} */
-  //var isBottomReached = function() {
-  //  var GAP = 100;
-  //  var footerElement = document.querySelector('footer');
-  //  var footerPosition = footerElement.getBoundingClientRect();
-  //  return footerPosition.top - window.innerHeight - GAP <= 0;
-  //};
-
-  /**
-   * @param {Array} hotels
-   * @param {number} page
-   * @param {number} pageSize
-   * @return {boolean}
-   */
-  var isNextPageAvailable = function(pictures, page, pageSize) {
-    return page < Math.floor(pictures.length / pageSize);
-  };
-
-  var setScrollEnabled = function() {
-    var scrollTimeout;
-
-    window.addEventListener('scroll', function(evt) {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(function() {
-        if (isNextPageAvailable(pictures, pageNumber, PAGE_SIZE)) {
-          pageNumber++;
-          renderPictures(filteredPictures, pageNumber);
-        }
-      }, 100);
-    });
   };
 
   getPictures(function(loadedPictures) {
@@ -216,4 +222,5 @@
   });
 
   filtersForm.classList.remove('hidden');
+
 })();
