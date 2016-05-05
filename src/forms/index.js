@@ -49,9 +49,6 @@ resizeModule.resizeForm.addEventListener('reset', function(evt) {
 filterModule.filterForm.addEventListener('submit', function(evt) {
   evt.preventDefault();
 
-  var formattedDateToExpire = new Date(dateToExpire).toUTCString();
-
-
   filterModule.setLastFilterToCookie();
 
   resizeModule.cleanupResizer();
