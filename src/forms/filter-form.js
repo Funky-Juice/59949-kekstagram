@@ -66,7 +66,7 @@ var formattedDateToExpire = daysToExpire();
  * Функция записи последнего фильтра в cookie.
  */
 function setLastFilterToCookie() {
-  var chekedFilterId = function () {
+  var chekedFilterId = function() {
     var inputField = filterForm.elements['upload-filter'];
 
     for (var i = 0; i < inputField.length; i++) {
@@ -88,7 +88,7 @@ function setLastFilterToCookie() {
  */
 filterForm.addEventListener('change', function() {
 
-  var selectedFilter = [].filter.call(filterForm['upload-filter'], function (item) {
+  var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
     return item.checked;
   })[0].value;
 
