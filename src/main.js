@@ -1,5 +1,4 @@
 'use strict';
 
-require('./resizer');
-require('./upload');
 require('./pictures');
+require('./forms/index');
