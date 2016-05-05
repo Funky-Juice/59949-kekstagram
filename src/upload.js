@@ -8,13 +8,13 @@
 'use strict';
 
 (function() {
-  /** @enum {string} */
-  var FileType = {
-    'GIF': '',
-    'JPEG': '',
-    'PNG': '',
-    'SVG+XML': ''
-  };
+  ///** @enum {string} */
+  //var FileType = {
+  //  'GIF': '',
+  //  'JPEG': '',
+  //  'PNG': '',
+  //  'SVG+XML': ''
+  //};
 
   /** @enum {number} */
   var Action = {
@@ -23,12 +23,12 @@
     CUSTOM: 2
   };
 
-  /**
-   * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
-   * из ключей FileType.
-   * @type {RegExp}
-   */
-  var fileRegExp = new RegExp('^image/(' + Object.keys(FileType).join('|').replace('\+', '\\+') + ')$', 'i');
+  ///**
+  // * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
+  // * из ключей FileType.
+  // * @type {RegExp}
+  // */
+  //var fileRegExp = new RegExp('^image/(' + Object.keys(FileType).join('|').replace('\+', '\\+') + ')$', 'i');
 
   /**
    * @type {Object.<string, string>}
