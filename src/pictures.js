@@ -92,8 +92,9 @@
 
   /** @return {boolean} */
   var isBottomReached = function() {
+    var GAP = 30;
     var picturesContainerRect = picturesContainer.getBoundingClientRect();
-    return window.innerHeight - picturesContainerRect.bottom >= 0;
+    return window.innerHeight - picturesContainerRect.bottom + GAP >= 0;
   };
 
   /** @param {Array.<Object>} pictures
@@ -185,6 +186,21 @@
       }, 100);
     });
   };
+
+  -----------------------------------------------------------------------
+var isWaiting = false
+
+  var setScrollEnabled = function() {
+    var scrollTimeout;
+    window.addEventListener('scroll', function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function() {
+        renderNextPages();
+      }, 100);
+    });
+  };
+
+  -----------------------------------------------------------------------
 
   /** @param {function(Array.<Object>)} callback */
   var getPictures = function(callback) {
