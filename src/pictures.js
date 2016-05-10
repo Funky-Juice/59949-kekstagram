@@ -187,20 +187,23 @@
     });
   };
 
-  -----------------------------------------------------------------------
-var isWaiting = false
-
-  var setScrollEnabled = function() {
-    var scrollTimeout;
-    window.addEventListener('scroll', function() {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(function() {
-        renderNextPages();
-      }, 100);
-    });
-  };
-
-  -----------------------------------------------------------------------
+  //-----------------------------------------------------------------------
+  //
+  //
+  //var setScrollEnabled = function() {
+  //  var scrollTimeout;
+  //  var isWaiting = false;
+  //
+  //  window.addEventListener('scroll', function() {
+  //    clearTimeout(scrollTimeout);
+  //    scrollTimeout = setTimeout(function() {
+  //      renderNextPages();
+  //      isWaiting = true;
+  //    }, 100);
+  //  });
+  //};
+  //
+  //-----------------------------------------------------------------------
 
   /** @param {function(Array.<Object>)} callback */
   var getPictures = function(callback) {
