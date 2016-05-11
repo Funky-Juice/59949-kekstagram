@@ -175,12 +175,15 @@ var setFiltersEnabled = function() {
 };
 
 var setScrollEnabled = function() {
-  var scrollTimeout;
+  var isWaiting = false;
   window.addEventListener('scroll', function() {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(function() {
-      renderNextPages();
-    }, 100);
+    if (!isWaiting) {
+      isWaiting = true;
+      setTimeout(function() {
+        renderNextPages();
+        isWaiting = false;
+      }, 100);
+    }
   });
 };
 
