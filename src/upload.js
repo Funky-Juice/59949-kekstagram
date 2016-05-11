@@ -250,18 +250,6 @@
     resizeForm.classList.remove('invisible');
   });
 
-  //Получаем ID выбранного фильтра
-  var chekedFilterId = function() {
-    var inputField = filterForm.elements['upload-filter'];
-
-    for (var i = 0; i < inputField.length; i++) {
-      if(inputField[i].checked) {
-        return inputField[i].id;
-      }
-    }
-    return '';
-  };
-
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
@@ -286,6 +274,8 @@
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
+
+    setLastFilterToCookie();
   }
 
   //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
@@ -301,15 +291,8 @@
     filterFormChangeHandler();
   }
 
-  /**
-   * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
-   * записав сохраненный фильтр в cookie.
-   * @param {Event} evt
-   */
-
-  filterForm.addEventListener('submit', function(evt) {
-    evt.preventDefault();
-
+  /** Расчет дней до истечения cookie. */
+  function daysToExpire() {
     var today = new Date();
     var birthYear = today.getFullYear();
 
@@ -319,11 +302,41 @@
       dateToExpire = +today + (+today - (+new Date(birthYear - 1, 9, 13)));
     }
 
-    var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+    return new Date(dateToExpire).toUTCString();
+  }
+
+  var formattedDateToExpire = daysToExpire();
+
+  /**
+   * Функция записи последнего фильтра в cookie.
+   */
+  function setLastFilterToCookie() {
+    var chekedFilterId = function() {
+      var inputField = filterForm.elements['upload-filter'];
+
+      for (var i = 0; i < inputField.length; i++) {
+        if (inputField[i].checked) {
+          return inputField[i].id;
+        }
+      }
+      return '';
+    };
 
     browserCookies.set('selectedFilter', chekedFilterId(), {
       expires: formattedDateToExpire
     });
+  }
+
+  /**
+   * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
+   * записав сохраненный фильтр в cookie.
+   * @param {Event} evt
+   */
+
+  filterForm.addEventListener('submit', function(evt) {
+    evt.preventDefault();
+
+    setLastFilterToCookie();
 
     cleanupResizer();
     updateBackground();
