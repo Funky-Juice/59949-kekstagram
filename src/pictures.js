@@ -182,11 +182,11 @@
     window.addEventListener('scroll', function() {
       if (!isWaiting) {
         isWaiting = true;
-        setTimeout(function () {
+        setTimeout(function() {
           renderNextPages();
           isWaiting = false;
         }, 100);
-      };
+      }
     });
   };
 
