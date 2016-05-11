@@ -244,6 +244,9 @@
     resizeY.value = squareObj.y;
   });
 
+  /** Проверка валидности данных в форме кадрирования. */
+  window.addEventListener('resizerchange', resizeFormIsValid);
+
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
