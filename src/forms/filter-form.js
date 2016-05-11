@@ -25,18 +25,11 @@ resizeModule.resizeForm.addEventListener('submit', function(evt) {
  * @type {HTMLFormElement}
  */
 var filterForm = document.forms['upload-filter'];
-var selectedFilter = browserCookies.get('selectedFilter') || false;
-var checkedFormId = filterForm.elements[selectedFilter];
-checkedFormId.setAttribute('checked', 'checked');
 
 /**
  * @type {Object.<string, string>}
  */
-var filterMap = {
-  'none': 'filter-none',
-  'chrome': 'filter-chrome',
-  'sepia': 'filter-sepia'
-};
+var filterMap;
 
 /**
  * Добавление значения фильтра из cookie к изображению при загрузке.
@@ -96,7 +89,17 @@ function setLastFilterToCookie() {
  * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
  * выбранному значению в форме.
  */
-filterForm.addEventListener('change', function() {
+function filterFormChangeHandler() {
+  if (!filterMap) {
+    // Ленивая инициализация. Объект не создается до тех пор, пока
+    // не понадобится прочитать его в первый раз, а после этого запоминается
+    // навсегда.
+    filterMap = {
+      'none': 'filter-none',
+      'chrome': 'filter-chrome',
+      'sepia': 'filter-sepia'
+    };
+  }
 
   var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
     return item.checked;
@@ -108,7 +111,20 @@ filterForm.addEventListener('change', function() {
   filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
 
   setLastFilterToCookie();
-});
+}
+
+  //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
+  var browserCookies = require('browser-cookies');
+
+  var filterCookie = browserCookies.get('selectedFilter') || false;
+
+  var checkedFormId = filterForm.elements[filterCookie];
+
+  if (checkedFormId) {
+    checkedFormId.checked = true;
+
+    filterFormChangeHandler();
+  }
 
 module.exports = {
   filterForm: filterForm,
