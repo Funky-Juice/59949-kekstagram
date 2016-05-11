@@ -165,7 +165,7 @@
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  var uploadChange = function(evt) {
+  uploadForm.addEventListener('change', function(evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -175,7 +175,7 @@
 
         showMessage(Action.UPLOADING);
 
-        var fileLoad = function() {
+        fileReader.addEventListener('load', function() {
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
@@ -186,9 +186,7 @@
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-        };
-
-        fileReader.addEventListener('load', fileLoad);
+        });
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -197,16 +195,14 @@
         showMessage(Action.ERROR);
       }
     }
-  };
-
-  uploadForm.addEventListener('change', uploadChange);
+  });
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  var resizeReset = function(evt) {
+  resizeForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -214,16 +210,14 @@
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
-
-  resizeForm.addEventListener('reset', resizeReset);
+  });
 
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  var resizeSubmit = function(evt) {
+  resizeForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -232,9 +226,7 @@
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
-
-  resizeForm.addEventListener('submit', resizeSubmit);
+  });
 
   /** Изменение значений полей по перетаскиванию изображения мышью. */
   window.addEventListener('resizerchange', function() {
@@ -251,14 +243,12 @@
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  var filterReset = function(evt) {
+  filterForm.addEventListener('reset', function(evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
-
-  filterForm.addEventListener('reset', filterReset);
+  });
 
   //Получаем ID выбранного фильтра
   var chekedFilterId = function() {
@@ -317,7 +307,7 @@
    * @param {Event} evt
    */
 
-  var filterSubmit = function(evt) {
+  filterForm.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     var today = new Date();
@@ -340,9 +330,7 @@
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
-
-  filterForm.addEventListener('submit', filterSubmit);
+  });
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
