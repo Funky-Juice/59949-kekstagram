@@ -219,3 +219,4 @@ getPictures(function(loadedPictures) {
 });
 
 filtersForm.classList.remove('hidden');
+test
