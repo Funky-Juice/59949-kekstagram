@@ -365,4 +365,6 @@ var Coordinate = function(x, y) {
   this.y = y;
 };
 
-window.Resizer = Resizer;
+//window.Resizer = Resizer;
+
+module.exports = Resizer;

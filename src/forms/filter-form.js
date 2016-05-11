@@ -4,11 +4,16 @@ var browserCookies = require('browser-cookies');
 
 var resizeModule = require('./resize-form');
 
+/**
+ * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
+ * кропнутое изображение в форму добавления фильтра и показывает ее.
+ * @param {Event} evt
+ */
 resizeModule.resizeForm.addEventListener('submit', function(evt) {
   evt.preventDefault();
 
   if (resizeModule.resizeFormIsValid()) {
-    filterImage.src = resizeModule.currentResizer.exportImageFromResizer();
+    filterImage.src = resizeModule.exportImageFromResizer();
 
     resizeModule.resizeForm.classList.add('invisible');
     filterForm.classList.remove('invisible');
