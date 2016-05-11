@@ -25,6 +25,9 @@ resizeModule.resizeForm.addEventListener('submit', function(evt) {
  * @type {HTMLFormElement}
  */
 var filterForm = document.forms['upload-filter'];
+var selectedFilter = browserCookies.get('selectedFilter') || false;
+var checkedFormId = filterForm.elements[selectedFilter];
+checkedFormId.setAttribute('checked', 'checked');
 
 /**
  * @type {Object.<string, string>}
@@ -36,9 +39,11 @@ var filterMap = {
 };
 
 /**
+ * Добавление значения фильтра из cookie к изображению при загрузке.
  * @type {HTMLImageElement}
  */
 var filterImage = filterForm.querySelector('.filter-image-preview');
+//filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
 
 /**
  * Сброс формы фильтра. Показывает форму кадрирования.
