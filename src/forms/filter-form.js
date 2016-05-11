@@ -114,17 +114,19 @@ function filterFormChangeHandler() {
 }
 
   //подключаем библиотеку 'browser-cookies' и считываем значение для куки фильтра
-  var browserCookies = require('browser-cookies');
+browserCookies = require('browser-cookies');
 
-  var filterCookie = browserCookies.get('selectedFilter') || false;
+var filterCookie = browserCookies.get('selectedFilter') || false;
 
-  var checkedFormId = filterForm.elements[filterCookie];
+var checkedFormId = filterForm.elements[filterCookie];
 
-  if (checkedFormId) {
-    checkedFormId.checked = true;
+if (checkedFormId) {
+  checkedFormId.checked = true;
 
-    filterFormChangeHandler();
-  }
+  filterFormChangeHandler();
+}
+
+filterForm.addEventListener('change', filterFormChangeHandler);
 
 module.exports = {
   filterForm: filterForm,
