@@ -119,6 +119,9 @@ window.addEventListener('resizerchange', function() {
   resizeY.value = squareObj.y;
 });
 
+/** Проверка валидности данных в форме кадрирования. */
+window.addEventListener('resizerchange', resizeFormIsValid);
+
 module.exports = {
   resizeForm: resizeForm,
   cleanupResizer: cleanupResizer,
