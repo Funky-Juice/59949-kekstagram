@@ -1,5 +1,7 @@
 'use strict';
 
+var galleryModule = require('./gallery');
+
 var filtersForm = document.querySelector('.filters');
 filtersForm.classList.add('hidden');
 var picturesContainer = document.querySelector('.pictures');
@@ -71,6 +73,11 @@ var getPictureElement = function(data, container) {
     contentImage.src = '';
     pictureElement.classList.add('picture-load-failure');
   }, IMAGE_LOAD_TIMEOUT);
+
+  pictureElement.addEventListener('click', function(evt) {
+    galleryModule.showGallery(filteredPictures.indexOf(data));
+    evt.preventDefault();
+  });
 
   container.appendChild(pictureElement);
   return pictureElement;
@@ -155,6 +162,7 @@ var getFilteredPictures = function(sortPictures, filter) {
 /** @param {Filter} filter */
 var setFilterEnabled = function(filter) {
   filteredPictures = getFilteredPictures(picturesArr, filter);
+  galleryModule.savePicturesArray(filteredPictures);
   renderNextPages(true);
 };
 
