@@ -1,20 +1,11 @@
 'use strict';
 
+var Photo = require('./photo');
 var galleryModule = require('./gallery');
 
 var filtersForm = document.querySelector('.filters');
 filtersForm.classList.add('hidden');
 var picturesContainer = document.querySelector('.pictures');
-var templateElement = document.querySelector('#picture-template');
-
-if ('content' in templateElement) {
-  var elementToClone = templateElement.content.querySelector('.picture');
-} else {
-  elementToClone = templateElement.querySelector('.picture');
-}
-
-/** @constant {number} */
-var IMAGE_LOAD_TIMEOUT = 10000;
 
 /** @constant {string} */
 var PICTURES_LOAD_URL = '//o0.github.io/assets/json/pictures.json';
@@ -44,44 +35,44 @@ var DEFAULT_FILTER = Filter.POPULAR;
 /** @constant {number} */
 var DAYS_COUNT = 14;
 
-/**
- * @param {Object} data
- * @param {HTMLElement} container
- * @return {HTMLElement}
- */
-var getPictureElement = function(data, container) {
-  var pictureElement = elementToClone.cloneNode(true);
-  pictureElement.querySelector('.picture-comments').textContent = data.comments;
-  pictureElement.querySelector('.picture-likes').textContent = data.likes;
-
-  var contentImage = new Image();
-  var contentLoadTimeout;
-
-  contentImage.onload = function() {
-    clearTimeout(contentLoadTimeout);
-
-    pictureElement.querySelector('img').src = data.url;
-  };
-
-  contentImage.onerror = function() {
-    pictureElement.classList.add('picture-load-failure');
-  };
-
-  contentImage.src = data.url;
-
-  contentLoadTimeout = setTimeout(function() {
-    contentImage.src = '';
-    pictureElement.classList.add('picture-load-failure');
-  }, IMAGE_LOAD_TIMEOUT);
-
-  pictureElement.addEventListener('click', function(evt) {
-    galleryModule.showGallery(filteredPictures.indexOf(data));
-    evt.preventDefault();
-  });
-
-  container.appendChild(pictureElement);
-  return pictureElement;
-};
+///**
+// * @param {Object} data
+// * @param {HTMLElement} container
+// * @return {HTMLElement}
+// */
+//var getPictureElement = function(data, container) {
+//  var pictureElement = elementToClone.cloneNode(true);
+//  pictureElement.querySelector('.picture-comments').textContent = data.comments;
+//  pictureElement.querySelector('.picture-likes').textContent = data.likes;
+//
+//  var contentImage = new Image();
+//  var contentLoadTimeout;
+//
+//  contentImage.onload = function() {
+//    clearTimeout(contentLoadTimeout);
+//
+//    pictureElement.querySelector('img').src = data.url;
+//  };
+//
+//  contentImage.onerror = function() {
+//    pictureElement.classList.add('picture-load-failure');
+//  };
+//
+//  contentImage.src = data.url;
+//
+//  contentLoadTimeout = setTimeout(function() {
+//    contentImage.src = '';
+//    pictureElement.classList.add('picture-load-failure');
+//  }, IMAGE_LOAD_TIMEOUT);
+//
+//  pictureElement.addEventListener('click', function(evt) {
+//    galleryModule.showGallery(filteredPictures.indexOf(data));
+//    evt.preventDefault();
+//  });
+//
+//  container.appendChild(pictureElement);
+//  return pictureElement;
+//};
 
 picturesContainer.classList.add('pictures-loading');
 
@@ -101,9 +92,12 @@ var isBottomReached = function() {
   return window.innerHeight - picturesContainerRect.bottom >= 0;
 };
 
+/** @type {Array.<Photo>} */
+var renderedPictures = [];
+
 /** @param {Array.<Object>} pictures
  *  @param {number} page
- *  @param {boolean=} replace
+ *  @param {boolean} replace
  */
 var renderPictures = function(pictures, page, replace) {
   if (replace) {
@@ -114,7 +108,7 @@ var renderPictures = function(pictures, page, replace) {
   var to = from + PAGE_SIZE;
 
   pictures.slice(from, to).forEach(function(picture) {
-    getPictureElement(picture, picturesContainer);
+    renderedPictures.push(new Photo(picture, filteredPictures.indexOf(picture), pictureContainer));
   });
 };
 
@@ -122,7 +116,10 @@ var renderPictures = function(pictures, page, replace) {
 var renderNextPages = function(reset) {
   if (reset) {
     pageNumber = 0;
-    picturesContainer.innerHTML = '';
+    renderedPictures.forEach(function(picture) {
+      picture.remove();
+    });
+    renderedPictures = [];
   }
   while(isBottomReached() &&
   isNextPageAvailable(picturesArr, pageNumber, PAGE_SIZE)) {
